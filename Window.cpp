@@ -41,8 +41,7 @@ BOOL Window::Create(PCWSTR lpWindowName,
 	wndClass.style = CS_OWNDC;
 	// Fill less important ones later on
 
-	if (!RegisterClassEx(&wndClass))
-		return FALSE;
+	RegisterClassEx(&wndClass);
 
 	m_hwnd = CreateWindowEx(
 		dwExStyle,
@@ -92,3 +91,5 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	}
 	return TRUE;
 }
+
+

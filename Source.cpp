@@ -2,11 +2,13 @@
 #include <shobjidl.h> 
 
 //#define DialogBoxExample
+#define ErrorThrowExample
 #define MyWindowTest
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
 
 	HRESULT result = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+
 
 #ifdef DialogBoxExample
 	if (SUCCEEDED(result)) {
@@ -43,12 +45,23 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	MainWindow window;
 	window.Create(L"New window", WS_OVERLAPPEDWINDOW);
 	window.Show(nCmdShow);
+
 	MSG msg;
 	while (GetMessage(&msg, nullptr, 0, 0) > 0) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
 	CoUninitialize();
+
+#ifdef ErrorThrowExample
+	try {
+		throw WindowException(WFILE, __LINE__, ERROR_ACCESS_DENIED);
+	}
+	catch (Exception& e) {
+		MessageBox(nullptr, e.Info().c_str(), L"ERROR", MB_OK);
+	}
+#endif
+
 	return 0;
 #endif
 }
