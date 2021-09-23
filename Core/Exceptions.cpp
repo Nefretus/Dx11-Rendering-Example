@@ -1,6 +1,7 @@
 #include "Exceptions.h"
 #include <sstream>
 
+
 // WINDOW EXCEPTION
 WindowException::WindowException(const std::wstring file, int line, HRESULT errorCode) :
 	Exception(line, file), m_errorCode(errorCode) 

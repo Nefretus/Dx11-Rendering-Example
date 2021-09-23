@@ -2,7 +2,7 @@
 #include <shobjidl.h> 
 
 //#define DialogBoxExample
-#define ErrorThrowExample
+//#define ErrorThrowExample
 #define MyWindowTest
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {

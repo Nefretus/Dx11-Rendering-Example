@@ -90,6 +90,7 @@
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>Events;Core;Resources;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -106,6 +107,7 @@
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>Events;Core;Resources;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -122,6 +124,7 @@
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>Events;Core;Resources;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,6 +141,7 @@
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>Events;Core;Resources;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -147,15 +151,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Exceptions.cpp" />
-    <ClCompile Include="Window.cpp" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="WindowMessageString.cpp" />
+    <ClCompile Include="Core\Exceptions.cpp" />
+    <ClCompile Include="Core\Window.cpp" />
+    <ClCompile Include="Core\Source.cpp" />
+    <ClCompile Include="Core\WindowMessageString.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Exceptions.h" />
-    <ClInclude Include="Window.h" />
-    <ClInclude Include="WindowMessageString.h" />
+    <ClInclude Include="Events\Event.h" />
+    <ClInclude Include="Core\Exceptions.h" />
+    <ClInclude Include="Resources\resource.h" />
+    <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Core\WindowMessageString.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\winAPI.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\chili.ico" />
+    <Image Include="Resources\darth-vader_icon-icons.com_76959.ico" />
+    <Image Include="Resources\joystick_game_games_5970.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

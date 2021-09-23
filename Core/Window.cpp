@@ -1,5 +1,6 @@
 #include "Window.h"
 #include "WindowMessageString.h"
+#include "resource.h"
 
 static WindowMessageString msg;
 
@@ -39,6 +40,16 @@ BOOL Window::Create(PCWSTR lpWindowName,
 	wndClass.hInstance = GetModuleHandle(nullptr);
 	wndClass.lpszClassName = GetClassName();
 	wndClass.style = CS_OWNDC;
+
+	try {
+		wndClass.hIcon = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON3), IMAGE_ICON, 32, 29, LR_DEFAULTCOLOR);
+		wndClass.hIconSm = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON3), IMAGE_ICON, 32, 29, LR_DEFAULTCOLOR);
+		if(!wndClass.hIcon || !wndClass.hIconSm)
+			throw WindowException(WFILE, __LINE__, GetLastError());	
+	}
+	catch (Exception& e) {
+		MessageBox(nullptr, e.Info().c_str(), L"ERROR", MB_OK);
+	}
 	// Fill less important ones later on
 
 	RegisterClassEx(&wndClass);
