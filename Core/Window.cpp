@@ -1,3 +1,4 @@
+#include "Keyboard.h"
 #include "Window.h"
 #include "WindowMessageString.h"
 #include "resource.h"
@@ -11,7 +12,7 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 		CREATESTRUCT* cs = reinterpret_cast<CREATESTRUCT*>(lParam);
 		instance = reinterpret_cast<Window*>(cs->lpCreateParams);
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)instance);
-		instance->m_hwnd = hwnd;
+		instance->m_Hwnd = hwnd;
 	}
 
 	instance = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -54,7 +55,7 @@ BOOL Window::Create(PCWSTR lpWindowName,
 
 	RegisterClassEx(&wndClass);
 
-	m_hwnd = CreateWindowEx(
+	m_Hwnd = CreateWindowEx(
 		dwExStyle,
 		GetClassName(),
 		lpWindowName,
@@ -66,11 +67,11 @@ BOOL Window::Create(PCWSTR lpWindowName,
 		this
 	);
 
-	return m_hwnd ? TRUE : FALSE;
+	return m_Hwnd ? TRUE : FALSE;
 }
 
 void Window::Show(int nCmdShow) {
-	ShowWindow(m_hwnd, nCmdShow);
+	ShowWindow(m_Hwnd, nCmdShow);
 }
 
 
@@ -80,15 +81,15 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	switch (uMsg) {
 	case WM_PAINT: {
 		PAINTSTRUCT ps;
-		HDC hdc = BeginPaint(m_hwnd, &ps);
+		HDC hdc = BeginPaint(m_Hwnd, &ps);
 		FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
-		EndPaint(m_hwnd, &ps);
+		EndPaint(m_Hwnd, &ps);
 		break;
 	}
 	
 	case WM_CLOSE:
-		if (MessageBox(m_hwnd, L"Really wanna quit?", L"Message", MB_ICONWARNING | MB_OKCANCEL) == IDOK) {
-			return DefWindowProc(m_hwnd, uMsg, wParam, lParam);
+		if (MessageBox(m_Hwnd, L"Really wanna quit?", L"Message", MB_ICONWARNING | MB_OKCANCEL) == IDOK) {
+			return DefWindowProc(m_Hwnd, uMsg, wParam, lParam);
 		}
 		else
 			break;
@@ -98,9 +99,14 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		break;
 
 	default:
-		return DefWindowProc(m_hwnd, uMsg, wParam, lParam);
+		break;
 	}
-	return TRUE;
+	// GLOBAL VARIABLES
+	//if (uMsg == WM_CHAR)
+		//_debugbreak();
+	Keyboard::s_Keyboard.WindoProc(uMsg, wParam, lParam);
+	//Mouse
+	return DefWindowProc(m_Hwnd, uMsg, wParam, lParam);
 }
 
 

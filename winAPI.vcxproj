@@ -90,7 +90,7 @@
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>Events;Core;Resources;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Events;Core;Resources;Input;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,7 +107,7 @@
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>Events;Core;Resources;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Events;Core;Resources;Input;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -124,7 +124,7 @@
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>Events;Core;Resources;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Events;Core;Resources;Input;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -141,7 +141,7 @@
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>Events;Core;Resources;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Events;Core;Resources;Input;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,10 +155,16 @@
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\Source.cpp" />
     <ClCompile Include="Core\WindowMessageString.cpp" />
+    <ClCompile Include="Input\Keyboard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Events\Event.h" />
     <ClInclude Include="Core\Exceptions.h" />
+    <ClInclude Include="Events\KeyboardEvent.h" />
+    <ClInclude Include="Events\MouseEvent.h" />
+    <ClInclude Include="Input\InputDevice.h" />
+    <ClInclude Include="Input\Keyboard.h" />
+    <ClInclude Include="Input\Mouse.h" />
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\WindowMessageString.h" />

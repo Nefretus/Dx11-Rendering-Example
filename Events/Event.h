@@ -7,8 +7,7 @@
 enum class eventType {
 	NONE = 0,
 	MOUSE_PRESSED, MOUSE_RELEASED, MOUSE_MOVED,
-	KEY_PRESSED, KEY_RELEASED,
-	WINDOW_CLOSED, WINDOW_RESIZED
+	KEY_PRESSED, KEY_RELEASED, CHAR
 };
 
 #define EVENT_TYPE(type) static const char* getStaticEventName() { return #type; }\

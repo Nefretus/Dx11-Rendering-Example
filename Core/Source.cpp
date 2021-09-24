@@ -1,9 +1,18 @@
+#include "Keyboard.h"
 #include "Window.h"
 #include <shobjidl.h> 
 
 //#define DialogBoxExample
 //#define ErrorThrowExample
 #define MyWindowTest
+
+
+class Witam {
+public:
+	Witam() {}
+	Witam(int a) : b(a) {}
+	int b;
+};
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
 
@@ -50,6 +59,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	while (GetMessage(&msg, nullptr, 0, 0) > 0) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
+
+		if (Keyboard::s_Keyboard.KeyIsPressed('F')) {
+			MessageBox(nullptr, L"Lecimy duur", L"ERROR", MB_OK);
+		}
 	}
 	CoUninitialize();
 

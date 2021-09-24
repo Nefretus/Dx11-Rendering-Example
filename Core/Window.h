@@ -7,8 +7,8 @@
 
 class Window {
 public:
-	Window() : m_hwnd(nullptr), height(0), width(0) {}
-	~Window() { DestroyWindow(m_hwnd); }
+	Window() : m_Hwnd(nullptr), height(0), width(0) {}
+	~Window() { DestroyWindow(m_Hwnd); }
 
 	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -29,7 +29,7 @@ protected:
 	virtual LPCWSTR GetClassName() const = 0;
 	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 	unsigned int width, height;
-	HWND m_hwnd;
+	HWND m_Hwnd;
 };
 
 class MainWindow : public Window {
