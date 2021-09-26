@@ -1,3 +1,4 @@
+#include "Mouse.h"
 #include "Keyboard.h"
 #include "Window.h"
 #include "WindowMessageString.h"
@@ -39,7 +40,7 @@ BOOL Window::Create(PCWSTR lpWindowName,
 	wndClass.cbSize = sizeof(wndClass);
 	wndClass.lpfnWndProc = Window::WindowProc;
 	wndClass.hInstance = GetModuleHandle(nullptr);
-	wndClass.lpszClassName = GetClassName();
+	wndClass.lpszClassName = GetName();
 	wndClass.style = CS_OWNDC;
 
 	try {
@@ -55,12 +56,27 @@ BOOL Window::Create(PCWSTR lpWindowName,
 
 	RegisterClassEx(&wndClass);
 
+	RECT wr;
+	wr.left = 100;
+	wr.right = m_Width + wr.left;
+	wr.top = 100;
+	wr.bottom = m_Height + wr.top;
+
+	try {
+		if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE) == 0) {
+			throw WindowException(WFILE, __LINE__, GetLastError());
+		}
+	}
+	catch (Exception& e) {
+		MessageBox(nullptr, e.Info().c_str(), L"ERROR", MB_OK);
+	}
+
 	m_Hwnd = CreateWindowEx(
 		dwExStyle,
-		GetClassName(),
+		GetName(),
 		lpWindowName,
 		dwStyle,
-		x, y, nWidth, nHeight,
+		x, y, wr.right - wr.left, wr.bottom - wr.top,
 		hWndParent,
 		hMenu,
 		GetModuleHandle(nullptr),
@@ -70,10 +86,15 @@ BOOL Window::Create(PCWSTR lpWindowName,
 	return m_Hwnd ? TRUE : FALSE;
 }
 
-void Window::Show(int nCmdShow) {
+void Window::Show(int nCmdShow) const {
 	ShowWindow(m_Hwnd, nCmdShow);
 }
 
+
+void Window::SetWindowTitle(const std::wstring& title) {
+	SetWindowText(m_Hwnd, title.c_str());
+	// ERROR CHECK
+}
 
 // DERIVED CLASES
 LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -87,6 +108,10 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		break;
 	}
 	
+	case WM_KILLFOCUS:
+		Keyboard::s_Keyboard.ClearKeyStates();
+		break;
+
 	case WM_CLOSE:
 		if (MessageBox(m_Hwnd, L"Really wanna quit?", L"Message", MB_ICONWARNING | MB_OKCANCEL) == IDOK) {
 			return DefWindowProc(m_Hwnd, uMsg, wParam, lParam);
@@ -101,12 +126,10 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	default:
 		break;
 	}
-	// GLOBAL VARIABLES
-	//if (uMsg == WM_CHAR)
-		//_debugbreak();
 	Keyboard::s_Keyboard.WindoProc(uMsg, wParam, lParam);
+	Mouse::s_Mouse.WindoProc(this, uMsg, wParam, lParam);
 	//Mouse
-	return DefWindowProc(m_Hwnd, uMsg, wParam, lParam);
+	return DefWindowProc(m_Hwnd, uMsg, wParam, lParam); // POSSIBLE BUG INVESTIGATE THIS
 }
 
 

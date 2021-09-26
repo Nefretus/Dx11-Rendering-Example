@@ -16,8 +16,8 @@ public:
 	KeyPressedEvent(int key) :
 		KeyEvent(key) {}
 
-	static eventType GetStaticType() { return eventType::KEY_PRESSED; }
-	eventType getEventType() const override { return GetStaticType(); }
+	static EventType GetStaticType() { return EventType::KeyPressed; }
+	EventType getEventType() const override { return GetStaticType(); }
 
 	EVENT_TYPE(KeyPressed);
 private:
@@ -30,8 +30,8 @@ public:
 	KeyReleasedEvent(int key) :
 		KeyEvent(key) {}
 
-	static eventType GetStaticType() { return eventType::KEY_RELEASED; }
-	eventType getEventType() const override { return GetStaticType(); }
+	static EventType GetStaticType() { return EventType::KeyReleased; }
+	EventType getEventType() const override { return GetStaticType(); }
 	EVENT_TYPE(KeyReleased);
 };
 
@@ -40,8 +40,8 @@ public:
 	CharEvent(WCHAR c) :
 		character(c) {}
 
-	static eventType GetStaticType() { return eventType::CHAR; }
-	eventType getEventType() const override { return GetStaticType(); }
+	static EventType GetStaticType() { return EventType::Char; }
+	EventType getEventType() const override { return GetStaticType(); }
 
 	WCHAR GetChar() const { return character; }
 	EVENT_TYPE(CHAR);

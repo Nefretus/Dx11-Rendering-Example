@@ -29,6 +29,10 @@ bool Keyboard::KeyIsPressed(int keycode) const {
 }
 
 
+void Keyboard::ClearKeyStates() {
+	m_KeyStates.reset();
+}
+
 void Keyboard::OnKeyPressed(int keyCode) { // unsigned char???
 	m_KeyStates[keyCode] = true;
 	m_EventQueue.push(std::move(std::make_unique<KeyPressedEvent>(keyCode)));

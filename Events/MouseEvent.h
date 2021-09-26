@@ -3,17 +3,17 @@
 
 class MouseMovedEvent : public BaseEvent {
 public:
-	MouseMovedEvent(double _xpos, double _ypos) :
+	MouseMovedEvent(int _xpos, int _ypos) :
 		xpos(_xpos), ypos(_ypos) {}
 
-	double GetX() const { return xpos; }
-	double GetY() const { return ypos; }
-	static eventType GetStaticType() { return eventType::MOUSE_MOVED; }
-	eventType getEventType() const override { return GetStaticType(); }
+	int GetX() const { return xpos; }
+	int GetY() const { return ypos; }
+	static EventType GetStaticType() { return EventType::MouseMoved; }
+	EventType getEventType() const override { return GetStaticType(); }
 
 	EVENT_TYPE(MouseMoved);
 private:
-	double xpos, ypos;
+	int xpos, ypos;
 };
 
 class MousePressedEvent : public BaseEvent {
@@ -22,8 +22,8 @@ public:
 		: button(_button) { }
 
 	int getButton() const { return button; }
-	static eventType GetStaticType() { return eventType::MOUSE_PRESSED; }
-	eventType getEventType() const override { return GetStaticType(); }
+	static EventType GetStaticType() { return EventType::MousePressed; }
+	EventType getEventType() const override { return GetStaticType(); }
 	EVENT_TYPE(MousePressed);
 private:
 	int button;
@@ -35,8 +35,8 @@ public:
 		: button(_button) { }
 
 	int getButton() const { return button; }
-	static eventType GetStaticType() { return eventType::MOUSE_RELEASED; }
-	eventType getEventType() const override { return GetStaticType(); }
+	static EventType GetStaticType() { return EventType::MouseReleased; }
+	EventType getEventType() const override { return GetStaticType(); }
 	EVENT_TYPE(MouseReleased);
 private:
 	int button;

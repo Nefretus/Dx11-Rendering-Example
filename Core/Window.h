@@ -7,7 +7,7 @@
 
 class Window {
 public:
-	Window() : m_Hwnd(nullptr), height(0), width(0) {}
+	Window(unsigned int width,unsigned int height) : m_Hwnd(nullptr), m_Height(height), m_Width(width) {}
 	~Window() { DestroyWindow(m_Hwnd); }
 
 	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -23,17 +23,25 @@ public:
 		HMENU hMenu = 0);
 
 	 // Argument controls how Window is to be shown
-	 void Show(int nCmdShow);
+	 void Show(int nCmdShow) const;
+	 void SetWindowTitle(const std::wstring& title);
+
+	 unsigned int GetWidth() const { return m_Width; }
+	 unsigned int GetHeight() const { return m_Height; }
+	 HWND GetNativeWindow() const { return m_Hwnd; }
 
 protected:
-	virtual LPCWSTR GetClassName() const = 0;
+	virtual LPCWSTR GetName() const = 0;
 	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
-	unsigned int width, height;
+	unsigned int m_Width, m_Height;
 	HWND m_Hwnd;
 };
 
 class MainWindow : public Window {
+public:
+	MainWindow(unsigned int width, unsigned int height) :
+		Window(width, height) {}
 private:
-	LPCWSTR GetClassName() const override { return L"New Class"; }
+	LPCWSTR GetName() const override { return L"New Class"; }
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 };

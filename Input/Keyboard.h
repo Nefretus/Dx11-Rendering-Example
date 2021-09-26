@@ -14,6 +14,7 @@ public:
 	void WindoProc(/*Wundow* inst*/UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	bool KeyIsPressed(int keycode) const;
+	void ClearKeyStates();
 	// char?
 
 private:

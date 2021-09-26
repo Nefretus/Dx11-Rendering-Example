@@ -1,19 +1,13 @@
 #include "Keyboard.h"
+#include"Mouse.h"
 #include "Window.h"
 #include <shobjidl.h> 
+#include<sstream>
+#include"MouseEvent.h"
 
 //#define DialogBoxExample
 //#define ErrorThrowExample
 #define MyWindowTest
-
-
-class Witam {
-public:
-	Witam() {}
-	Witam(int a) : b(a) {}
-	int b;
-};
-
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
 
 	HRESULT result = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
@@ -51,7 +45,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 #endif
 
 #ifdef MyWindowTest
-	MainWindow window;
+	MainWindow window(1000, 800);
 	window.Create(L"New window", WS_OVERLAPPEDWINDOW);
 	window.Show(nCmdShow);
 
@@ -60,12 +54,32 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 
-		if (Keyboard::s_Keyboard.KeyIsPressed('F')) {
+		if (Keyboard::s_Keyboard.KeyIsPressed(VK_SPACE)) {
 			MessageBox(nullptr, L"Lecimy duur", L"ERROR", MB_OK);
+		}
+
+		if (Mouse::s_Mouse.LeftIsPressed()) {
+			OutputDebugStringA("MAM KLIKNIECIE\n");
+		}
+
+		while (!Mouse::s_Mouse.QueueIsEmpty()) {
+			auto event = Mouse::s_Mouse.ReadEvent();
+			if (event) {
+				EventType type = (*event)->getEventType();
+				switch (type) {
+				case EventType::MouseMoved: {
+					auto& e = static_cast<MouseMovedEvent&>(*(*event));
+					std::wostringstream oss;
+					oss << L"X: " << e.GetX() << L" Y:" << e.GetY();
+					window.SetWindowTitle(oss.str());
+					break;
+					}
+				}
+			}
 		}
 	}
 	CoUninitialize();
-
+	
 #ifdef ErrorThrowExample
 	try {
 		throw WindowException(WFILE, __LINE__, ERROR_ACCESS_DENIED);

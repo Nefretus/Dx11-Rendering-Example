@@ -4,10 +4,10 @@
 #include <unordered_map>
 #include <iostream>
 
-enum class eventType {
-	NONE = 0,
-	MOUSE_PRESSED, MOUSE_RELEASED, MOUSE_MOVED,
-	KEY_PRESSED, KEY_RELEASED, CHAR
+enum class EventType {
+	None = 0,
+	MousePressed, MouseReleased, MouseMoved,
+	KeyPressed, KeyReleased, Char
 };
 
 #define EVENT_TYPE(type) static const char* getStaticEventName() { return #type; }\
@@ -16,7 +16,7 @@ enum class eventType {
 class BaseEvent {
 public:
 	virtual ~BaseEvent() = default;
-	virtual eventType getEventType() const = 0;
+	virtual EventType getEventType() const = 0;
 	virtual const char* getEventName() const = 0;
 private:
 	bool handled = false; // potrzebne?
