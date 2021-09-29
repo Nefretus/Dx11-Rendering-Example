@@ -1,6 +1,6 @@
 #pragma once
 #include "InputDevice.h"
-#include "Windows.h"
+#include "Window.h"
 #include <bitset>
 
 class Keyboard : public InputDevice {
@@ -11,7 +11,7 @@ public:
 
 	static Keyboard s_Keyboard;
 
-	void WindoProc(/*Wundow* inst*/UINT uMsg, WPARAM wParam, LPARAM lParam);
+	void WindoProc(Window* window, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	bool KeyIsPressed(int keycode) const;
 	void ClearKeyStates();

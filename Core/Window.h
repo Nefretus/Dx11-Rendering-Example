@@ -23,7 +23,7 @@ public:
 		HMENU hMenu = 0);
 
 	 // Argument controls how Window is to be shown
-	 void Show(int nCmdShow) const;
+	 void Show(int nCmdShow = SW_SHOWDEFAULT) const;
 	 void SetWindowTitle(const std::wstring& title);
 
 	 unsigned int GetWidth() const { return m_Width; }

@@ -121,14 +121,13 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 	case WM_DESTROY:
 		PostQuitMessage(0);
-		break;
+		return TRUE;
 
 	default:
 		break;
 	}
-	Keyboard::s_Keyboard.WindoProc(uMsg, wParam, lParam);
+	Keyboard::s_Keyboard.WindoProc(this, uMsg, wParam, lParam);
 	Mouse::s_Mouse.WindoProc(this, uMsg, wParam, lParam);
-	//Mouse
 	return DefWindowProc(m_Hwnd, uMsg, wParam, lParam); // POSSIBLE BUG INVESTIGATE THIS
 }
 

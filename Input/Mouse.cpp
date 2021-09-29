@@ -5,7 +5,7 @@ Mouse Mouse::s_Mouse;
 
 Mouse::Mouse() :
 	m_LeftButtonPressed(false), m_RightButtonPressed(false),
-	m_Xpos(0), m_Ypos(0), m_MouseIsInWindow(true) // SETTING THIS TO FALSE CREATES WEIRD BUG
+	m_Xpos(0), m_Ypos(0), m_MouseIsInWindow(false)
 {}
 
 void Mouse::WindoProc(Window* window, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -19,16 +19,15 @@ void Mouse::WindoProc(Window* window, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		break;
 	}
 	case WM_LBUTTONUP: {
-		OnRightReleased(MK_RBUTTON);
+		OnLeftReleased(MK_LBUTTON);
 		break;
 	}
 	case WM_RBUTTONUP: {
-		OnLeftReleased(MK_LBUTTON);
+		OnRightReleased(MK_RBUTTON);
 		break;
 	}
 	case WM_MOUSEMOVE: {
 		POINTS point = MAKEPOINTS(lParam);
-		// TO NIE DZIALA, NAPRAW TO ZACZNIJ OD ZMIENIENIA m_MouseIsInWindow na false, bug z przeciaganiem poza ekran
 		if ((point.x >= 0 && point.x < window->GetWidth()) && (point.y >= 0 && point.y < window->GetHeight())) {
 			OnMouseMove(point.x, point.y);
 			HWND hwnd = window->GetNativeWindow();

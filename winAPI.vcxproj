@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Application.cpp" />
     <ClCompile Include="Core\Exceptions.cpp" />
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\Source.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="Input\Mouse.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Application.h" />
     <ClInclude Include="Events\Event.h" />
     <ClInclude Include="Core\Exceptions.h" />
     <ClInclude Include="Events\KeyboardEvent.h" />

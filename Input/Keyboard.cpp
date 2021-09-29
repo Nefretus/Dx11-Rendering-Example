@@ -3,7 +3,7 @@
 
 Keyboard Keyboard::s_Keyboard;
 
-void Keyboard::WindoProc(UINT uMsg, WPARAM wParam, LPARAM lParam) {
+void Keyboard::WindoProc(Window* window ,UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	switch (uMsg) {
 	case WM_CHAR: {
 		OnChar(static_cast<WCHAR>(wParam));

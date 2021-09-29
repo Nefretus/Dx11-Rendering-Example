@@ -1,17 +1,23 @@
-#include "Keyboard.h"
-#include"Mouse.h"
-#include "Window.h"
-#include <shobjidl.h> 
-#include<sstream>
-#include"MouseEvent.h"
+//#include "Keyboard.h"
+//#include"Mouse.h"
+//#include "Window.h"
+//#include <shobjidl.h> 
+//#include<sstream>
+//#include"MouseEvent.h"
 
 //#define DialogBoxExample
 //#define ErrorThrowExample
-#define MyWindowTest
+//#define MyWindowTest
+
+#include<Application.h>
+
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
 
 	HRESULT result = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
 
+	Application* app = new Application;
+	app->Run();
+	delete app;
 
 #ifdef DialogBoxExample
 	if (SUCCEEDED(result)) {
@@ -47,7 +53,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 #ifdef MyWindowTest
 	MainWindow window(1000, 800);
 	window.Create(L"New window", WS_OVERLAPPEDWINDOW);
-	window.Show(nCmdShow);
+	window.Show();
 
 	MSG msg;
 	while (GetMessage(&msg, nullptr, 0, 0) > 0) {
@@ -91,4 +97,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 	return 0;
 #endif
+
+	CoUninitialize();
 }
