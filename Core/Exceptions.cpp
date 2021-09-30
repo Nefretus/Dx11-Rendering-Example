@@ -3,11 +3,11 @@
 
 
 // WINDOW EXCEPTION
-WindowException::WindowException(const std::wstring file, int line, HRESULT errorCode) :
+Win32Exception::Win32Exception(const std::wstring file, int line, HRESULT errorCode) :
 	Exception(line, file), m_errorCode(errorCode) 
 {}
 
-const std::wstring WindowException::TranslateErrorCode() {
+const std::wstring Win32Exception::TranslateErrorCode() {
 	LPWSTR errorText = NULL;
 	FormatMessage(
 		FORMAT_MESSAGE_FROM_SYSTEM
@@ -25,7 +25,7 @@ const std::wstring WindowException::TranslateErrorCode() {
 	return errorMsg;
 }
 
-const std::wstring WindowException::Info() {
+const std::wstring Win32Exception::Info() {
 	std::wostringstream ss;
 	ss << "FILE: " << m_file << "\n"
 		<< "LINE: " << m_line << "\n"

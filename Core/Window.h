@@ -2,6 +2,7 @@
 #include "Windows.h"
 #include <memory>
 #include "Exceptions.h"
+#include"Graphics.h"
 
 // NIE DZIALA WSPARCIE DLA WIELU OKIEN, PROGRAM WYPIERDALA SIE PRZEZ WYWOLANIE DESTRUKTORA hehe xd
 
@@ -30,11 +31,16 @@ public:
 	 unsigned int GetHeight() const { return m_Height; }
 	 HWND GetNativeWindow() const { return m_Hwnd; }
 
+	 //probably temp
+	 Graphics& GetGraphics() { return *m_Graphics; }
+
 protected:
 	virtual LPCWSTR GetName() const = 0;
 	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 	unsigned int m_Width, m_Height;
 	HWND m_Hwnd;
+
+	std::unique_ptr<Graphics> m_Graphics;
 };
 
 class MainWindow : public Window {

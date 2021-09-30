@@ -7,6 +7,14 @@
 #define WIDE1(x) WIDE2(x)
 #define WFILE WIDE1(__FILE__)
 
+#define THROW_IF_FAILED(hr) if(FAILED(hr)) throw Win32Exception(WFILE, __LINE__, hr);
+
+enum class ExeptionType {
+	UNKNOWN = 0,
+	WINDOW,
+	GRAPHICS,
+};
+
 class Exception : public std::exception {
 public:
 	Exception(int line, const std::wstring& file) : m_line(line), m_file(file)
@@ -22,11 +30,11 @@ protected:
 	std::wstring m_file;
 };
 
-class WindowException : public Exception {
+class Win32Exception : public Exception {
 public:
-	WindowException(const std::wstring file, int line, HRESULT errorCode);
+	Win32Exception(const std::wstring file, int line, HRESULT errorCode);
 
-	LPCTSTR GetType() const override { return L"Window exception"; }
+	LPCTSTR GetType() const override { return L"WinAPI exception"; }
 	HRESULT GetErrorCode() const { return m_errorCode; }
 
 	const std::wstring Info() override;

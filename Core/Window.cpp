@@ -47,7 +47,7 @@ BOOL Window::Create(PCWSTR lpWindowName,
 		wndClass.hIcon = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON3), IMAGE_ICON, 32, 29, LR_DEFAULTCOLOR);
 		wndClass.hIconSm = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON3), IMAGE_ICON, 32, 29, LR_DEFAULTCOLOR);
 		if(!wndClass.hIcon || !wndClass.hIconSm)
-			throw WindowException(WFILE, __LINE__, GetLastError());	
+			throw Win32Exception(WFILE, __LINE__, GetLastError());
 	}
 	catch (Exception& e) {
 		MessageBox(nullptr, e.Info().c_str(), L"ERROR", MB_OK);
@@ -64,7 +64,7 @@ BOOL Window::Create(PCWSTR lpWindowName,
 
 	try {
 		if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE) == 0) {
-			throw WindowException(WFILE, __LINE__, GetLastError());
+			throw Win32Exception(WFILE, __LINE__, GetLastError());
 		}
 	}
 	catch (Exception& e) {
@@ -83,7 +83,18 @@ BOOL Window::Create(PCWSTR lpWindowName,
 		this
 	);
 
-	return m_Hwnd ? TRUE : FALSE;
+	if (m_Hwnd) {
+		try {
+			m_Graphics = std::make_unique<Graphics>(m_Hwnd);
+		}
+		catch (Exception& e) {
+			MessageBox(nullptr, e.Info().c_str(), L"ERROR", MB_OK);
+		}
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
 }
 
 void Window::Show(int nCmdShow) const {
@@ -100,13 +111,13 @@ void Window::SetWindowTitle(const std::wstring& title) {
 LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	msg.PrintWindowMessage(uMsg);
 	switch (uMsg) {
-	case WM_PAINT: {
-		PAINTSTRUCT ps;
-		HDC hdc = BeginPaint(m_Hwnd, &ps);
-		FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
-		EndPaint(m_Hwnd, &ps);
-		break;
-	}
+	//case WM_PAINT: {
+	//	PAINTSTRUCT ps;
+	//	HDC hdc = BeginPaint(m_Hwnd, &ps);
+	//	FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
+	//	EndPaint(m_Hwnd, &ps);
+	//	break;
+	//}
 	
 	case WM_KILLFOCUS:
 		Keyboard::s_Keyboard.ClearKeyStates();

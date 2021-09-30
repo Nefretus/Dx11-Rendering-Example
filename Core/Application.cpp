@@ -7,7 +7,8 @@
 
 Application::Application() : m_IsRunning(true) {
 	m_Window = std::make_unique<MainWindow>(1000, 800);
-	m_Window->Create(L"New window", WS_OVERLAPPEDWINDOW);
+	if (!m_Window->Create(L"New window", WS_OVERLAPPEDWINDOW))
+		exit(-1);
 	m_Window->Show();
 }
 
@@ -27,6 +28,8 @@ void Application::Run() {
 	while (m_IsRunning) {
 		ProcessMessages();
 		Testing();
+		m_Window->GetGraphics().Clear();
+		m_Window->GetGraphics().SwapBuffers();
 	}
 }
 
@@ -43,8 +46,6 @@ void Application::Testing() {
 		auto event = Mouse::s_Mouse.ReadEvent();
 		if (event) {
 			EventType type = (*event)->getEventType();
-			//OutputDebugStringA((*event)->getEventName());
-			//OutputDebugStringA("\n");
 			switch (type) {
 			case EventType::MouseMoved: {
 				auto& e = static_cast<MouseMovedEvent&>(*(*event));

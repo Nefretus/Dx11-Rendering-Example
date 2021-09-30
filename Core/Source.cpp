@@ -1,10 +1,3 @@
-//#include "Keyboard.h"
-//#include"Mouse.h"
-//#include "Window.h"
-//#include <shobjidl.h> 
-//#include<sstream>
-//#include"MouseEvent.h"
-
 //#define DialogBoxExample
 //#define ErrorThrowExample
 //#define MyWindowTest
