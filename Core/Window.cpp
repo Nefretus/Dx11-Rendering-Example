@@ -46,11 +46,11 @@ BOOL Window::Create(PCWSTR lpWindowName,
 	try {
 		wndClass.hIcon = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON3), IMAGE_ICON, 32, 29, LR_DEFAULTCOLOR);
 		wndClass.hIconSm = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON3), IMAGE_ICON, 32, 29, LR_DEFAULTCOLOR);
-		if(!wndClass.hIcon || !wndClass.hIconSm)
-			throw Win32Exception(WFILE, __LINE__, GetLastError());
+		if (!wndClass.hIcon || !wndClass.hIconSm)
+			THROW_FAILED();
 	}
 	catch (Exception& e) {
-		MessageBox(nullptr, e.Info().c_str(), L"ERROR", MB_OK);
+		GET_INFO(e);
 	}
 	// Fill less important ones later on
 
@@ -64,11 +64,11 @@ BOOL Window::Create(PCWSTR lpWindowName,
 
 	try {
 		if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE) == 0) {
-			throw Win32Exception(WFILE, __LINE__, GetLastError());
+			THROW_FAILED();
 		}
 	}
 	catch (Exception& e) {
-		MessageBox(nullptr, e.Info().c_str(), L"ERROR", MB_OK);
+		GET_INFO(e);
 	}
 
 	m_Hwnd = CreateWindowEx(
@@ -88,7 +88,7 @@ BOOL Window::Create(PCWSTR lpWindowName,
 			m_Graphics = std::make_unique<Graphics>(m_Hwnd);
 		}
 		catch (Exception& e) {
-			MessageBox(nullptr, e.Info().c_str(), L"ERROR", MB_OK);
+			GET_INFO(e);
 		}
 		return TRUE;
 	}
@@ -109,7 +109,7 @@ void Window::SetWindowTitle(const std::wstring& title) {
 
 // DERIVED CLASES
 LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	msg.PrintWindowMessage(uMsg);
+	//msg.PrintWindowMessage(uMsg);
 	switch (uMsg) {
 	//case WM_PAINT: {
 	//	PAINTSTRUCT ps;

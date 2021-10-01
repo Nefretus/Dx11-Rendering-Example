@@ -8,6 +8,8 @@
 #define WFILE WIDE1(__FILE__)
 
 #define THROW_IF_FAILED(hr) if(FAILED(hr)) throw Win32Exception(WFILE, __LINE__, hr);
+#define THROW_FAILED() throw Win32Exception(WFILE, __LINE__, GetLastError());
+#define GET_INFO(exeption) MessageBox(nullptr, exeption.Info().c_str(), L"ERROR", MB_OK);
 
 enum class ExeptionType {
 	UNKNOWN = 0,

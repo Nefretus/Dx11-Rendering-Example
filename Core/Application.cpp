@@ -29,7 +29,13 @@ void Application::Run() {
 		ProcessMessages();
 		Testing();
 		m_Window->GetGraphics().Clear();
-		m_Window->GetGraphics().SwapBuffers();
+		try {
+			m_Window->GetGraphics().MakeTriangle();
+			m_Window->GetGraphics().SwapBuffers();
+		}
+		catch (Exception& e) {
+			GET_INFO(e);
+		}		
 	}
 }
 
