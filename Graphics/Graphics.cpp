@@ -79,12 +79,12 @@ void Graphics::Clear() {
 void Graphics::MakeTriangle() {
 	
 	float verticies[] = {
-		-1.0f, 0.0f,
-		 1.0f, 0.0f,
-		 0.0f, 1.0f
+		 0.0f, 0.5f,
+		 0.5f, -0.5f,
+		-0.5f, -0.5f
 	};
 
-	//Vertex Buffer description
+	//Vertex Buffer descriptor
 	D3D11_BUFFER_DESC desc{};
 	desc.ByteWidth =  sizeof(verticies);
 	desc.Usage = D3D11_USAGE_DEFAULT;
@@ -104,14 +104,6 @@ void Graphics::MakeTriangle() {
 	THROW_IF_FAILED(m_Device->CreateBuffer(&desc, &data, &vertexBuffer));
     m_Context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offest); //& ???
 	
-	//set vertex buffer layout
-	D3D11_INPUT_ELEMENT_DESC elementDesc = {};
-	//elementDesc.
-
-
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
-	//m_Device->CreateInputLayout( , 1, )
-
 
 	// VERTEX SHADER
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> vs;
@@ -120,8 +112,17 @@ void Graphics::MakeTriangle() {
 	THROW_IF_FAILED(m_Device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, vs.GetAddressOf())); //there can e & i guess
 	m_Context->VSSetShader(vs.Get(), nullptr, 0);
 
+	//set vertex buffer layout
+	D3D11_INPUT_ELEMENT_DESC inputDescs[] = {
+		{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
+	m_Device->CreateInputLayout(inputDescs, 1, blob->GetBufferPointer(), blob->GetBufferSize(), &layout);
+	m_Context->IASetInputLayout(layout.Get());
+
 	// Pixel shader
-	THROW_IF_FAILED(D3DReadFileToBlob(L"VertexShader.cso", &blob));
+	THROW_IF_FAILED(D3DReadFileToBlob(L"PixelShader.cso", &blob));
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> ps;
 	m_Device->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, ps.GetAddressOf());
 	m_Context->PSSetShader(ps.Get(), nullptr, 0);
