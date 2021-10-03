@@ -77,21 +77,44 @@ void Graphics::Clear() {
 }
 
 void Graphics::MakeTriangle() {
-	
+
 	float verticies[] = {
-		 0.0f, 0.5f,
-		 0.5f, -0.5f,
-		-0.5f, -0.5f
+		 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
 	};
 
+	UINT indices[] = {
+		2, 3, 0,
+		0, 1, 2
+	};
+
+	// index buffer
+	Microsoft::WRL::ComPtr<ID3D11Buffer> IBO;
+
+	D3D11_SUBRESOURCE_DATA iboData = {};
+	iboData.pSysMem = indices;
+
+	D3D11_BUFFER_DESC IBODesc{};
+	IBODesc.ByteWidth = sizeof(indices);
+	IBODesc.Usage = D3D11_USAGE_DEFAULT;
+	IBODesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	IBODesc.CPUAccessFlags = 0; //	we dont need cpu to accsess buffer after drawing
+	IBODesc.MiscFlags = 0;
+	IBODesc.StructureByteStride = sizeof(UINT);
+	m_Device->CreateBuffer(&IBODesc, &iboData, &IBO);
+
+	m_Context->IASetIndexBuffer(IBO.Get(), DXGI_FORMAT_R32_UINT, 0);
+
 	//Vertex Buffer descriptor
-	D3D11_BUFFER_DESC desc{};
-	desc.ByteWidth =  sizeof(verticies);
-	desc.Usage = D3D11_USAGE_DEFAULT;
-	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	desc.CPUAccessFlags = 0; //	
-	desc.MiscFlags = 0;
-	desc.StructureByteStride = 2 * sizeof(float);
+	D3D11_BUFFER_DESC bufferDesc{};
+	bufferDesc.ByteWidth = sizeof(verticies);
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.CPUAccessFlags = 0; 	
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = 5 * sizeof(float);
 
 	// Load data
 	D3D11_SUBRESOURCE_DATA data{};
@@ -99,10 +122,10 @@ void Graphics::MakeTriangle() {
 	
 	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
 
-	const UINT stride = desc.StructureByteStride;
-	const UINT offest = 0;
-	THROW_IF_FAILED(m_Device->CreateBuffer(&desc, &data, &vertexBuffer));
-    m_Context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offest); //& ???
+	const UINT stride = bufferDesc.StructureByteStride;
+	const UINT offests = 0;
+	THROW_IF_FAILED(m_Device->CreateBuffer(&bufferDesc, &data, &vertexBuffer));
+    m_Context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offests); //& ???
 	
 
 	// VERTEX SHADER
@@ -114,11 +137,12 @@ void Graphics::MakeTriangle() {
 
 	//set vertex buffer layout
 	D3D11_INPUT_ELEMENT_DESC inputDescs[] = {
-		{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
+		{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 2 * sizeof(float), D3D11_INPUT_PER_VERTEX_DATA, 0} // lets add some colors tommorow
 	};
 
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
-	m_Device->CreateInputLayout(inputDescs, 1, blob->GetBufferPointer(), blob->GetBufferSize(), &layout);
+	m_Device->CreateInputLayout(inputDescs, (UINT)std::size(inputDescs), blob->GetBufferPointer(), blob->GetBufferSize(), &layout);
 	m_Context->IASetInputLayout(layout.Get());
 
 	// Pixel shader
@@ -143,5 +167,6 @@ void Graphics::MakeTriangle() {
 	// set primitive topology
 	m_Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	m_Context->Draw(3, 0);
+	//m_Context->Draw(sizeof(verticies)/bufferDesc.StructureByteStride, 0);
+	m_Context->DrawIndexed(std::size(indices), 0, 0);
 }
