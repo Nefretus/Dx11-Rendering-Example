@@ -13,6 +13,8 @@ public:
 	void SwapBuffers();
 	void Clear();
 
+	void ConstBufferTesting();
+
 	void MakeTriangle();
 private:
 
@@ -20,4 +22,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Device> m_Device = nullptr;
 	Microsoft::WRL::ComPtr <ID3D11DeviceContext> m_Context = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_TargetView = nullptr;
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> m_ConstBuffer = nullptr;
+
+	float m_Angle = 0.0f;
 };

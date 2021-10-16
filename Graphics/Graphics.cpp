@@ -1,6 +1,7 @@
 #include"Graphics.h"
 #include"Exceptions.h"
 #include<d3dcompiler.h>
+#include<DirectXMath.h>
 
 #pragma comment(lib, "D3DCompiler.lib")
 
@@ -68,12 +69,30 @@ Graphics::Graphics(HWND hwnd) {
 }
 
 void Graphics::SwapBuffers() {
-	THROW_IF_FAILED(m_SwapChain->Present( 1, 0));
+	THROW_IF_FAILED(m_SwapChain->Present(1, 0));
 }
 
 void Graphics::Clear() {
 	FLOAT colors[4] = { 0.1f, 0.2f, 0.3f, 1.0f };
 	m_Context->ClearRenderTargetView(m_TargetView.Get(), colors);
+}
+
+void Graphics::ConstBufferTesting() {
+	DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixRotationZ(m_Angle);
+
+	D3D11_BUFFER_DESC desc = {};
+	desc.ByteWidth = sizeof(DirectX::XMMATRIX);
+	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	desc.MiscFlags = 0;
+	desc.StructureByteStride = 0;
+	D3D11_SUBRESOURCE_DATA data = {};
+	data.pSysMem = &rotationMatrix;
+
+	m_Device->CreateBuffer(&desc, &data, &m_ConstBuffer);
+	m_Context->VSSetConstantBuffers(0, 1, m_ConstBuffer.GetAddressOf());
+	m_Angle += 0.02f;
 }
 
 void Graphics::MakeTriangle() {
@@ -128,6 +147,8 @@ void Graphics::MakeTriangle() {
     m_Context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offests); //& ???
 	
 
+	ConstBufferTesting();
+
 	// VERTEX SHADER
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> vs;
 	Microsoft::WRL::ComPtr<ID3DBlob> blob;
@@ -138,7 +159,7 @@ void Graphics::MakeTriangle() {
 	//set vertex buffer layout
 	D3D11_INPUT_ELEMENT_DESC inputDescs[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 2 * sizeof(float), D3D11_INPUT_PER_VERTEX_DATA, 0} // lets add some colors tommorow
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 2 * sizeof(float), D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
