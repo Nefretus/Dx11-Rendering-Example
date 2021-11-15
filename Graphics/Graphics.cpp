@@ -2,6 +2,9 @@
 #include"Exceptions.h"
 #include<d3dcompiler.h>
 #include<DirectXMath.h>
+#include"Mouse.h"
+#include<DirectXPackedVector.h>
+#include<DirectXColors.h>
 
 #pragma comment(lib, "D3DCompiler.lib")
 
@@ -21,7 +24,7 @@ Graphics::Graphics(HWND hwnd) {
 	sd.BufferDesc.RefreshRate.Denominator = 0;
 	sd.BufferDesc.RefreshRate.Numerator = 0;
 	sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM; // can be rgba
-	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE; // on dal oba unspecified
+	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE; // on dal oba unspec
 	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED; 
 
 	sd.SampleDesc.Count = 1; // should be 2 ?
@@ -78,8 +81,12 @@ void Graphics::Clear() {
 }
 
 void Graphics::ConstBufferTesting() {
-	DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixRotationZ(m_Angle);
-
+	DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixTranspose(DirectX::XMMatrixRotationZ(m_Angle));
+	DirectX::XMFLOAT2 vec((float)Mouse::s_Mouse.GetXpos(), (float)Mouse::s_Mouse.GetYPos());
+	DirectX::XMVECTOR result = DirectX::XMVector3Transform(DirectX::XMLoadFloat2(&vec), DirectX::XMMatrixTranslation(2.0f, 1.0f, 1.0f));
+	MessageBox(nullptr, std::to_wstring(DirectX::XMVectorGetX(result)).c_str(), L"ERROR", MB_OK);
+	//DirectX::XMMATRIX translationMatrix = DirectX::XMMatrixTranslation(vec.x, vec.y, 1.0f);
+	//DirectX::XMMATRIX translationMatrix = translationMatrix * rotationMatrix;
 	D3D11_BUFFER_DESC desc = {};
 	desc.ByteWidth = sizeof(DirectX::XMMATRIX);
 	desc.Usage = D3D11_USAGE_DYNAMIC;
