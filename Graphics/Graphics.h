@@ -12,10 +12,14 @@ public:
 
 	void SwapBuffers();
 	void Clear();
+	void CreateConstantBuffer();
 
 	void MakeTriangle();
-private:
 
+private:
+	float angle = 0.0f;
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> m_ConstBuffer = nullptr;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> m_SwapChain = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Device> m_Device = nullptr;
 	Microsoft::WRL::ComPtr <ID3D11DeviceContext> m_Context = nullptr;
