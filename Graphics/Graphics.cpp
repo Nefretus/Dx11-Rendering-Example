@@ -1,6 +1,10 @@
 #include"Graphics.h"
 #include"Exceptions.h"
 #include<d3dcompiler.h>
+#include<DirectXMath.h>
+#include"Mouse.h"
+#include<DirectXPackedVector.h>
+#include<DirectXColors.h>
 
 #pragma comment(lib, "D3DCompiler.lib")
 
@@ -20,7 +24,7 @@ Graphics::Graphics(HWND hwnd) {
 	sd.BufferDesc.RefreshRate.Denominator = 0;
 	sd.BufferDesc.RefreshRate.Numerator = 0;
 	sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM; // can be rgba
-	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE; // on dal oba unspecified
+	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE; // on dal oba unspec
 	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED; 
 
 	sd.SampleDesc.Count = 1; // should be 2 ?
@@ -68,12 +72,34 @@ Graphics::Graphics(HWND hwnd) {
 }
 
 void Graphics::SwapBuffers() {
-	THROW_IF_FAILED(m_SwapChain->Present( 1, 0));
+	THROW_IF_FAILED(m_SwapChain->Present(1, 0));
 }
 
 void Graphics::Clear() {
 	FLOAT colors[4] = { 0.1f, 0.2f, 0.3f, 1.0f };
 	m_Context->ClearRenderTargetView(m_TargetView.Get(), colors);
+}
+
+void Graphics::ConstBufferTesting() {
+	DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixTranspose(DirectX::XMMatrixRotationZ(m_Angle));
+	DirectX::XMFLOAT2 vec((float)Mouse::s_Mouse.GetXpos(), (float)Mouse::s_Mouse.GetYPos());
+	DirectX::XMVECTOR result = DirectX::XMVector3Transform(DirectX::XMLoadFloat2(&vec), DirectX::XMMatrixTranslation(2.0f, 1.0f, 1.0f));
+	MessageBox(nullptr, std::to_wstring(DirectX::XMVectorGetX(result)).c_str(), L"ERROR", MB_OK);
+	//DirectX::XMMATRIX translationMatrix = DirectX::XMMatrixTranslation(vec.x, vec.y, 1.0f);
+	//DirectX::XMMATRIX translationMatrix = translationMatrix * rotationMatrix;
+	D3D11_BUFFER_DESC desc = {};
+	desc.ByteWidth = sizeof(DirectX::XMMATRIX);
+	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	desc.MiscFlags = 0;
+	desc.StructureByteStride = 0;
+	D3D11_SUBRESOURCE_DATA data = {};
+	data.pSysMem = &rotationMatrix;
+
+	m_Device->CreateBuffer(&desc, &data, &m_ConstBuffer);
+	m_Context->VSSetConstantBuffers(0, 1, m_ConstBuffer.GetAddressOf());
+	m_Angle += 0.02f;
 }
 
 void Graphics::MakeTriangle() {
@@ -128,6 +154,8 @@ void Graphics::MakeTriangle() {
     m_Context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offests); //& ???
 	
 
+	ConstBufferTesting();
+
 	// VERTEX SHADER
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> vs;
 	Microsoft::WRL::ComPtr<ID3DBlob> blob;
@@ -138,7 +166,7 @@ void Graphics::MakeTriangle() {
 	//set vertex buffer layout
 	D3D11_INPUT_ELEMENT_DESC inputDescs[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 2 * sizeof(float), D3D11_INPUT_PER_VERTEX_DATA, 0} // lets add some colors tommorow
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 2 * sizeof(float), D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
