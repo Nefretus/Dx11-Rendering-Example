@@ -1,7 +1,6 @@
 #include"Graphics.h"
 #include"Exceptions.h"
 #include<d3dcompiler.h>
-#include<DirectXMath.h>
 
 #pragma comment(lib, "D3DCompiler.lib")
 
@@ -77,27 +76,11 @@ void Graphics::Clear() {
 	m_Context->ClearRenderTargetView(m_TargetView.Get(), colors);
 }
 
-void Graphics::CreateConstantBuffer() {
-	DirectX::XMMATRIX rotationMatrix;
-	rotationMatrix = DirectX::XMMatrixRotationZ(angle);
-	D3D11_BUFFER_DESC desc = {};
-	desc.ByteWidth = sizeof(rotationMatrix);
-	desc.Usage = D3D11_USAGE_DYNAMIC;
-	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; 
-	desc.MiscFlags = 0;
-	desc.StructureByteStride = 0;
-	D3D11_SUBRESOURCE_DATA data = {};
-	data.pSysMem = &rotationMatrix;
-	m_Device->CreateBuffer( &desc, &data, &m_ConstBuffer);
-	m_Context->VSSetConstantBuffers(0, 1, m_ConstBuffer.GetAddressOf());
-}
-
 void Graphics::MakeTriangle() {
 
-	float vertices[] = {
-		 0.75f, 0.5f, 1.0f, 0.0f, 0.0f,
-		 0.75f, -0.5f, 0.0f, 1.0f, 0.0f,
+	float verticies[] = {
+		 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
 		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
 		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
 	};
@@ -124,12 +107,9 @@ void Graphics::MakeTriangle() {
 
 	m_Context->IASetIndexBuffer(IBO.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-	angle += 0.02f;
-	CreateConstantBuffer();
-
 	//Vertex Buffer descriptor
 	D3D11_BUFFER_DESC bufferDesc{};
-	bufferDesc.ByteWidth = sizeof(vertices);
+	bufferDesc.ByteWidth = sizeof(verticies);
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bufferDesc.CPUAccessFlags = 0; 	
@@ -138,7 +118,7 @@ void Graphics::MakeTriangle() {
 
 	// Load data
 	D3D11_SUBRESOURCE_DATA data{};
-	data.pSysMem = vertices;
+	data.pSysMem = verticies; 
 	
 	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
 
