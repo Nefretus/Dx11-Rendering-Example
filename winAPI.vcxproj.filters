@@ -79,9 +79,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resources\chili.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Resources\darth-vader_icon-icons.com_76959.ico">
       <Filter>Resource Files</Filter>
     </Image>

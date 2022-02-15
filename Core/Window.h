@@ -4,7 +4,7 @@
 #include "Exceptions.h"
 #include"Graphics.h"
 
-// NIE DZIALA WSPARCIE DLA WIELU OKIEN, PROGRAM WYPIERDALA SIE PRZEZ WYWOLANIE DESTRUKTORA hehe xd
+// NIE DZIALA WSPARCIE DLA WIELU OKIEN
 
 class Window {
 public:

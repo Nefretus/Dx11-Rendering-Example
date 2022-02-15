@@ -182,7 +182,6 @@
     <ResourceCompile Include="Resources\winAPI.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resources\chili.ico" />
     <Image Include="Resources\darth-vader_icon-icons.com_76959.ico" />
     <Image Include="Resources\joystick_game_games_5970.ico" />
   </ItemGroup>

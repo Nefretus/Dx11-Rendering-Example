@@ -52,8 +52,6 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON1               ICON                    "chili.ico"
-
 IDI_ICON2               ICON                    "joystick_game_games_5970.ico"
 
 IDI_ICON3               ICON                    "darth-vader_icon-icons.com_76959.ico"

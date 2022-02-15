@@ -19,7 +19,7 @@ public:
 	virtual EventType getEventType() const = 0;
 	virtual const char* getEventName() const = 0;
 private:
-	bool handled = false; // potrzebne?
+	bool handled = false; 
 };
 
 class EventDispatcher {
@@ -32,19 +32,18 @@ public:
 	}
 
 	template<typename T>
-	void dispatch(BaseEvent& event) { // const 
+	void dispatch(BaseEvent& event) { 
 		const std::string eventName = event.getEventName();
 		if (callbacks.find(eventName) == callbacks.end()) {
 			std::cout << "Callback function is not set!\n";
 			return;
 		}
 		else {
-			// Call callback functions
 			for (const auto& callback : callbacks.at(eventName))
 				callback(event);
 		}
 	}
 
-private: // string
+private: 
 	std::unordered_map<std::string, std::vector<EventCallbackFunction>> callbacks;
 };
