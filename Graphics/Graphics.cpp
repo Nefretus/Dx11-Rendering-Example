@@ -84,7 +84,7 @@ void Graphics::ConstBufferTesting() {
 	DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixTranspose(DirectX::XMMatrixRotationZ(m_Angle));
 	DirectX::XMFLOAT2 vec((float)Mouse::s_Mouse.GetXpos(), (float)Mouse::s_Mouse.GetYPos());
 	DirectX::XMVECTOR result = DirectX::XMVector3Transform(DirectX::XMLoadFloat2(&vec), DirectX::XMMatrixTranslation(2.0f, 1.0f, 1.0f));
-	MessageBox(nullptr, std::to_wstring(DirectX::XMVectorGetX(result)).c_str(), L"ERROR", MB_OK);
+	//MessageBox(nullptr, std::to_wstring(DirectX::XMVectorGetX(result)).c_str(), L"ERROR", MB_OK);
 	//test
 	//DirectX::XMMATRIX translationMatrix = DirectX::XMMatrixTranslation(vec.x, vec.y, 1.0f);
 	//DirectX::XMMATRIX translationMatrix = translationMatrix * rotationMatrix;
